@@ -4,14 +4,13 @@
 #include <iomanip>
 using namespace std;
 
-static void sortArrival(vector<Process>& list) {
-    sort(list.begin(), list.end(), [](Process a, Process b) {
-        return a.arrivalTime < b.arrivalTime;
-    });
+//Sorts processes by arrival time (ascending)
+bool compareArrivalTime(Process a, Process b) {
+    return a.arrivalTime < b.arrivalTime;
 }
 
 void runFCFS(vector<Process>& list) {
-    sortArrival(list);
+    sort(list.begin(), list.end(), compareArrivalTime);
 
     int time = 0;
 
