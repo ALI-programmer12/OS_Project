@@ -1,4 +1,5 @@
 #include "Preemptive_Priorityscheduling.h"
+#include "simulator.h"
 #include <climits>
 using namespace std;
 
@@ -11,6 +12,7 @@ void preemptivePriorityScheduling(Process p[], int n) {
         for (int i = 0; i < n; i++)
             if (p[i].at <= time && p[i].rt > 0 && p[i].pr < best) { best = p[i].pr; idx = i; }
         if (idx == -1) { time++; continue; }
+        currentGantt.push_back(make_tuple(time, p[idx].pid, 1));
         p[idx].rt--;
         time++;
         if (p[idx].rt == 0) {

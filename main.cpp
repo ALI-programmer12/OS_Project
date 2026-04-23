@@ -48,6 +48,12 @@ static Color procColor(int pid) {
 }
 
 // ─────────────────────────────────────────────
+//  FILE PATHS
+// ─────────────────────────────────────────────
+static const char* IMG_PATH = "images/bg.jpg";
+static const char* SND_PATH = "audios/a2.wav";
+
+// ─────────────────────────────────────────────
 //  HELPERS
 // ─────────────────────────────────────────────
 static void DrawCard(Rectangle r, Color fill, Color border) {
@@ -209,6 +215,15 @@ int main() {
     InitWindow(SW, SH, "CPU Scheduling Simulator");
     SetTargetFPS(60);
 
+    // ── Audio and Image Setup ──────────────────
+    InitAudioDevice();
+    Sound bgSound = LoadSound(SND_PATH);
+    if (bgSound.frameCount > 0) {
+        PlaySound(bgSound);
+    }
+
+    Texture2D bgTexture = LoadTexture(IMG_PATH);
+
     // ── State ──────────────────────────────────
     State state      = INPUT_NUM;
     int   numProc    = 0;
@@ -299,6 +314,17 @@ int main() {
         // ── DRAW ────────────────────────────────
         BeginDrawing();
         ClearBackground(C_BG);
+
+        // ── Draw Background Image ───────────────
+        if (bgTexture.id != 0) {
+            DrawTexturePro(bgTexture,
+                Rectangle{ 0, 0, (float)bgTexture.width, (float)bgTexture.height },
+                Rectangle{ 0, 0, (float)SW, (float)SH },
+                Vector2{ 0, 0 }, 0.0f, WHITE);
+        }
+
+        // ── Semi-transparent Overlay ────────────
+        DrawRectangle(0, 0, SW, SH, ColorAlpha(C_BG, 0.85f));
 
         // ── TOP HEADER BAR ──────────────────────
         DrawRectangle(0, 0, SW, 56, C_CARD);
@@ -671,6 +697,10 @@ int main() {
         EndDrawing();
     }
 
+    // ── Cleanup ─────────────────────────────────
+    UnloadTexture(bgTexture);
+    UnloadSound(bgSound);
+    CloseAudioDevice();
     CloseWindow();
     if (p) delete[] p;
     return 0;

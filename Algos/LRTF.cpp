@@ -1,4 +1,5 @@
 #include "LRTF.h"
+#include "simulator.h"
 using namespace std;
 
 void lrtfScheduling(Process p[], int n) {
@@ -10,6 +11,7 @@ void lrtfScheduling(Process p[], int n) {
         for (int i = 0; i < n; i++)
             if (p[i].at <= time && p[i].rt > 0 && p[i].rt > maxRT) { maxRT = p[i].rt; idx = i; }
         if (idx == -1) { time++; continue; }
+        currentGantt.push_back(make_tuple(time, p[idx].pid, 1));
         p[idx].rt--;
         time++;
         if (p[idx].rt == 0) {

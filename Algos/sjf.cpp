@@ -1,4 +1,5 @@
 #include "sjf.h"
+#include "simulator.h"
 #include <climits>
 using namespace std;
 
@@ -12,6 +13,7 @@ void shortestJobFirst(Process p[], int n) {
         for (int i = 0; i < n; i++)
             if (p[i].at <= time && p[i].rt > 0 && p[i].bt < minBT) { minBT = p[i].bt; idx = i; }
         if (idx == -1) { time++; continue; }
+        currentGantt.push_back(make_tuple(time, p[idx].pid, p[idx].bt));
         time += p[idx].bt;
         p[idx].tat = time - p[idx].at;
         p[idx].wt  = p[idx].tat - p[idx].bt;
@@ -30,6 +32,7 @@ void shortestRemainingTime(Process p[], int n) {
         for (int i = 0; i < n; i++)
             if (p[i].at <= time && p[i].rt > 0 && p[i].rt < minRT) { minRT = p[i].rt; idx = i; }
         if (idx == -1) { time++; continue; }
+        currentGantt.push_back(make_tuple(time, p[idx].pid, 1));
         p[idx].rt--;
         time++;
         if (p[idx].rt == 0) {

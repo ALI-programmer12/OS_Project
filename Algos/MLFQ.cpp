@@ -1,4 +1,5 @@
 #include "MLFQ.h"
+#include "simulator.h"
 #include <queue>
 using namespace std;
 
@@ -34,6 +35,7 @@ void mlfqScheduling(Process p[], int n) {
         else                  { idx = q3.front(); q3.pop(); tq = p[idx].rt; lv = 3; }
 
         int exec = (p[idx].rt < tq) ? p[idx].rt : tq;
+        currentGantt.push_back(make_tuple(time, p[idx].pid, exec));
         p[idx].rt -= exec;
         time += exec;
         enqueueArrivals();

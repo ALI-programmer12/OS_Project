@@ -1,4 +1,5 @@
 #include "Non-Preemptive_Priorityscheduling.h"
+#include "simulator.h"
 using namespace std;
 
 void nonPreemptivePriorityScheduling(Process p[], int n) {
@@ -11,6 +12,7 @@ void nonPreemptivePriorityScheduling(Process p[], int n) {
             if (p[i].at <= time && p[i].rt > 0)
                 if (idx == -1 || p[i].pr < p[idx].pr) idx = i;
         if (idx == -1) { time++; continue; }
+        currentGantt.push_back(make_tuple(time, p[idx].pid, p[idx].bt));
         time += p[idx].bt;
         p[idx].tat = time - p[idx].at;
         p[idx].wt  = p[idx].tat - p[idx].bt;
